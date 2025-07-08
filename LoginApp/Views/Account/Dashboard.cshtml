@@ -1,0 +1,120 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+    var selectedClass = ViewBag.SelectedClass as string;
+    var classes = ViewBag.Classes as List<string>;
+    var notifications = ViewBag.Notifications as List<LoginApp.Models.TaskRecord>;
+    int total = ViewBag.TotalTasks;
+    int completed = ViewBag.CompletedTasks;
+    double percentage = total > 0 ? ((double)completed / total) * 100 : 0;
+    var pending = ViewBag.PendingTasks;
+
+    if (string.IsNullOrEmpty(selectedClass) && classes != null && classes.Any())
+    {
+        selectedClass = classes.First();
+        Response.Redirect(Url.Action("Dashboard", "Account", new { selectedClass = selectedClass }));
+    }
+}
+
+<div class="content-card" style="overflow-x: hidden; padding: 20px;">
+    <h2 class="text-center" style="color: #2C3E50; border-bottom: 2px solid #2C3E50; padding-bottom: 10px;">
+        🧑‍🏫 Teacher Dashboard
+    </h2>
+
+    <!-- Class Filter -->
+    <div style="display: flex; justify-content: flex-end; margin: 20px 0; padding-right: 50px;">
+        <form method="get" action="@Url.Action("Dashboard", "Account")" class="class-filter-form"
+              style="display: flex; align-items: center; gap: 10px; padding: 15px 25px;">
+            <label for="selectedClass" style="font-weight: bold; color: #2C3E50;">Select Class:</label>
+            <select name="selectedClass" id="selectedClass" onchange="this.form.submit()"
+                    style="padding: 8px 12px; border-radius: 8px; border: 1px solid #ccc; min-width: 180px;">
+                <option value="">-- Select Class --</option>
+                @foreach (var cls in classes)
+                {
+                    <option value="@cls" @(cls == selectedClass ? "selected" : "")>@cls</option>
+                }
+            </select>
+        </form>
+    </div>
+
+    @if (!string.IsNullOrEmpty(selectedClass))
+    {
+        <h4 class="text-center" style="color: #2C3E50;">Showing dashboard for class: <strong>@selectedClass</strong></h4>
+
+        <!-- Notifications -->
+        <div class="content-card p-3 mb-4 shadow rounded" style="background-color: #ECF0F1;">
+            <h5 class="card-header">🔔 Recent Notifications</h5>
+            <ul class="list-unstyled">
+                @if (notifications != null && notifications.Any())
+                {
+                    foreach (var note in notifications)
+                    {
+                        <li><strong>@note.StudentName</strong> - @note.Status (@note.Title)</li>
+                    }
+                }
+                else
+                {
+                    <li>No recent updates.</li>
+                }
+            </ul>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="dashboard-cards"
+             style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 100%;">
+            <div class="card" style="background: #e0d4f7; padding: 20px; border-radius: 12px; width: 200px; text-align: center;">
+                <h3>Total Students</h3>
+                <p>@ViewBag.TotalStudents</p>
+            </div>
+            <div class="card" style="background: #d8f0fc; padding: 20px; border-radius: 12px; width: 200px; text-align: center;">
+                <h3>Total Tasks</h3>
+                <p>@total</p>
+            </div>
+            <div class="card" style="background: #fff3cd; padding: 20px; border-radius: 12px; width: 200px; text-align: center;">
+                <h3>Pending Tasks</h3>
+                <p>@pending</p>
+            </div>
+            <div class="card" style="background: #d4edda; padding: 20px; border-radius: 12px; width: 200px; text-align: center;">
+                <h3>Completed Tasks</h3>
+                <p>@completed</p>
+            </div>
+        </div>
+
+        <!-- Task Completion -->
+        <div class="content-card mt-4 p-3 shadow rounded" style="background-color: #ECF0F1;">
+            <h5 class="card-header">📋 Task Completion</h5>
+            <div class="progress" style="height: 25px;">
+                <div class="progress-bar" role="progressbar"
+                     style="width: @percentage; background-color: #2C3E50;"
+                     aria-valuenow="@percentage" aria-valuemin="0" aria-valuemax="100">
+                    <strong>@percentage.ToString("F1")%</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart -->
+        <div class="mt-4" style="margin-bottom: 50px;">
+            <canvas id="taskChart" width="100" height="25"></canvas>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const ctx = document.getElementById('taskChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Total Tasks', 'Completed Tasks', 'Pending Tasks'],
+                    datasets: [{
+                        label: 'Task Status Overview',
+                        data: [@total, @completed, @pending],
+                        backgroundColor: ['#3E5668', '#27AE60', '#95A5A6']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        </script>
+    }
+</div>

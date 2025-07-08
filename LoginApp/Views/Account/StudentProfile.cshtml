@@ -1,0 +1,240 @@
+﻿@model Student
+
+@{
+    ViewBag.Title = "My Profile";
+}
+
+<div class="dashboard-wrapper">
+    <div class="content-card">
+        <h2 class="card-header">👤 My Profile / Edit Profile</h2>
+
+        @if (TempData["Message"] != null)
+        {
+            <div class="toast-message" id="toast">@TempData["Message"]</div>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="error-message">@TempData["Error"]</div>
+        }
+
+        @using (Html.BeginForm("UpdateStudentProfile", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.Id)
+
+            <div class="form-container">
+                <!-- Profile Image Upload -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ProfileImage">Profile Picture:</label>
+                        <input type="file" name="ProfileImage" class="form-control" accept="image/*" onchange="previewImage(event)" />
+
+                        <img id="profilePreview" src="@Url.Content(ViewBag.ProfileImagePath ?? "~/Content/Images/default-profile.png")"
+                             style="width: 100px; height: 100px; border-radius: 50%; margin-top: 10px; object-fit: cover;" />
+                    </div>
+                </div>
+
+                <!-- First Row -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="Name">Name:</label>
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "Enter name" })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "error-message" })
+                    </div>
+                    <div class="form-group">
+                        <label for="RollNo">Roll No:</label>
+                        @Html.TextBoxFor(model => model.RollNo, new { @class = "form-control", @placeholder = "Enter roll number" })
+                        @Html.ValidationMessageFor(model => model.RollNo, "", new { @class = "error-message" })
+                    </div>
+                    <div class="form-group">
+                        <label for="Class">Class:</label>
+                        @Html.DropDownListFor(model => model.Class, (SelectList)ViewBag.ClassList, "Select Class", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Class, "", new { @class = "error-message" })
+                    </div>
+                </div>
+
+                <!-- Second Row -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="Email">Email:</label>
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @type = "email", @placeholder = "Enter email" })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "error-message" })
+                    </div>
+                    <div class="form-group">
+                        <label for="Phone">Phone Number:</label>
+                        @Html.TextBoxFor(model => model.Phone, new { @class = "form-control", @placeholder = "Enter phone number" })
+                        @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "error-message" })
+                    </div>
+                    <div class="form-group">
+                        <label for="DateOfBirth">Date of Birth:</label>
+                        @Html.TextBoxFor(model => model.DateOfBirth, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date", @max = DateTime.Today.ToString("yyyy-MM-dd") })
+                        @Html.ValidationMessageFor(model => model.DateOfBirth, "", new { @class = "error-message" })
+                    </div>
+                </div>
+
+                <!-- Username (readonly display) -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Username:</label>
+                        <div class="readonly-text">@Model.Username</div>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <button type="submit" class="btn-submit">💾 Save Changes</button>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function () {
+            const output = document.getElementById('profilePreview');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+
+<style>
+    /* Your existing styles here */
+</style>
+
+
+<style>
+    .dashboard-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 40px;
+        background: #ecf0f1;
+    }
+
+    .content-card {
+        width: 100vw;
+        height: 100vh;
+        background-color: #ecf0f1;
+        padding: 30px 40px;
+    }
+
+    .card-header {
+        font-size: 28px;
+        color: #2C3E50;
+        margin-top: -30px;
+        margin-bottom: 80px;
+        border-bottom: 2px solid #2C3E50;
+        padding-bottom: 10px;
+    }
+
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .form-group {
+        flex: 1;
+        min-width: 280px;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="date"],
+    select {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        font-size: 16px;
+    }
+
+    input[readonly] {
+        background-color: #eaeaea;
+        color: #777;
+    }
+
+    .readonly-text {
+        background-color: #eaeaea;
+        padding: 10px;
+        border-radius: 10px;
+        font-size: 16px;
+        color: #555;
+    }
+
+    .btn-submit {
+        background-color: #2C3E50;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        width: fit-content;
+    }
+
+        .btn-submit:hover {
+            background-color: #1a252f;
+        }
+
+    .error-message {
+        color: #d9534f;
+        font-size: 14px;
+        margin-top: 4px;
+    }
+
+    .toast-message {
+        background-color: #28a745;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-size: 16px;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        animation: slideIn 0.5s ease-out;
+    }
+</style>
+
+<script>
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function () {
+            const output = document.getElementById('profilePreview');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+
+    function confirmSave() {
+        if (confirm("Are you sure you want to save the changes?")) {
+            document.forms[0].submit();
+        }
+    }
+
+    // Toast fade-out
+    setTimeout(() => {
+        const toast = document.getElementById("toast");
+        if (toast) toast.style.display = "none";
+    }, 4000);
+</script>
+

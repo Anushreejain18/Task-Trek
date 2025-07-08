@@ -1,0 +1,327 @@
+﻿@{
+    ViewBag.Title = "Add Task";
+}
+
+<div class="dashboard-wrapper">
+    <div class="content-card">
+        <h2 class="card-header">📝 Add Task</h2>
+
+        @if (TempData["Error"] != null)
+        {
+        <div class="error-message">@TempData["Error"]</div>
+        }
+
+        @if (TempData["Message"] != null)
+        {
+        <div class="success-message">@TempData["Message"]</div>
+        }
+
+        <form id="taskForm" method="post" action="/Account/AddTasks" onsubmit="return validateTaskForm()">
+            <div class="form-container">
+                <!-- First Row -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="taskTitle">Task Title:</label>
+                        <input type="text" id="taskTitle" name="Title" placeholder="Enter task title" />
+                        <span class="error-message" id="taskTitleError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDescription">Task Description:</label>
+                        <textarea id="taskDescription" name="Description" placeholder="Enter task description"></textarea>
+                        <span class="error-message" id="taskDescriptionError"></span>
+                    </div>
+                </div>
+
+                <!-- Second Row -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="classSelection">Select Class:</label>
+                        <select id="classSelection" name="Class" onchange="filterStudentsByClass()">
+                            <option value="">-- Select Class --</option>
+                            @foreach (var className in ViewBag.Classes)
+                            {
+                            <option value="@className">@className</option>
+                            }
+                        </select>
+                        <span class="error-message" id="classError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Assign to Student(s):</label>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="selectAll" onclick="toggleSelectAll()" />
+                            <label for="selectAll"><b>Select All Students</b></label>
+                        </div>
+                        <div id="studentList" class="student-checkboxes">
+                            <p class="error">Please select a class to load students.</p>
+                        </div>
+                        <span class="error-message" id="studentError"></span>
+                    </div>
+                </div>
+
+                <!-- Third Row -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="startDate">Start Date:</label>
+                        <input type="date" id="startDate" name="StartDate" />
+                        <span class="error-message" id="startDateError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="endDate">End Date:</label>
+                        <input type="date" id="endDate" name="EndDate" />
+                        <span class="error-message" id="endDateError"></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">➕ Add Task</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: white;
+    }
+
+
+    .content-card {
+        background-color: #ecf0f1;
+        padding: 30px;
+    }
+
+    .card-header {
+        font-size: 28px;
+        color: #2C3E50;
+        margin-top: -10px;
+        margin-bottom: 60px;
+        border-bottom: 2px solid #2C3E50;
+        padding-bottom: 10px;
+    }
+
+
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+    }
+
+    .form-group {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2C3E50;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px 12px;
+            font-size: 15px;
+            border: 2px solid #2C3E50;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+            color: #333;
+            resize: vertical;
+        }
+
+    textarea {
+        height: 100px;
+    }
+
+    .checkbox-group {
+        margin-bottom: 10px;
+    }
+
+    .student-checkboxes {
+        max-height: 150px;
+        overflow-y: auto;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        background-color: #f9f9f9;
+    }
+
+        .student-checkboxes p {
+            margin: 0;
+            color: #888;
+        }
+
+    .btn-submit {
+        background-color: #2C3E50;
+        color: #fff;
+        padding: 12px 20px;
+        font-size: 17px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        width: fit-content;
+        transition: background 0.3s ease;
+    }
+
+        .btn-submit:hover {
+            background-color: #1a252f;
+        }
+
+    .error-message {
+        color: red;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    .success-message {
+        color: green;
+        font-weight: bold;
+        font-size: 14px;
+        margin-top: -15px;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const today = new Date().toISOString().split('T')[0];
+        let startDateInput = document.getElementById("startDate");
+        let endDateInput = document.getElementById("endDate");
+
+        // Set minimum selectable dates
+        startDateInput.setAttribute("min", today);
+        endDateInput.setAttribute("min", today);
+
+        // Ensure end date updates dynamically based on selected start date
+        startDateInput.addEventListener("change", function () {
+            let selectedStartDate = startDateInput.value;
+            if (selectedStartDate) {
+                endDateInput.setAttribute("min", selectedStartDate);
+            }
+        });
+    });
+    function filterStudentsByClass() {
+        let selectedClass = document.getElementById("classSelection").value;
+        let studentList = document.getElementById("studentList");
+
+        if (!selectedClass) {
+            studentList.innerHTML = "<p class='error'>Please select a class to load students.</p>";
+            return;
+        }
+
+        // Clear previous students and show loading message
+        studentList.innerHTML = "<p class='error'>Loading students...</p>";
+
+        fetch(`/Account/GetStudentsByClass?selectedClass=${selectedClass}&t=${new Date().getTime()}`)
+            .then(response => response.json())
+            .then(data => {
+                studentList.innerHTML = ""; // Clear previous data
+
+                if (data.length > 0) {
+                    data.forEach(student => {
+                        let checkbox = document.createElement("input");
+                        checkbox.type = "checkbox";
+                        checkbox.name = "assignedStudents";
+                        checkbox.value = student.id;
+                        checkbox.id = "student_" + student.id;
+                        checkbox.classList.add("student-checkbox");
+
+                        let label = document.createElement("label");
+                        label.htmlFor = "student_" + student.id;
+                        label.textContent = `${student.name} - ${student.rollNo}`;
+
+                        let div = document.createElement("div");
+                        div.classList.add("checkbox-group");
+                        div.appendChild(checkbox);
+                        div.appendChild(label);
+
+                        studentList.appendChild(div);
+                    });
+                } else {
+                    studentList.innerHTML = "<p class='error'>No students found in this class.</p>";
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching students:", error);
+                studentList.innerHTML = "<p class='error'>Failed to load students. Please try again.</p>";
+            });
+    }
+
+    function validateTaskForm() {
+        let title = document.getElementById("taskTitle").value.trim();
+        let description = document.getElementById("taskDescription").value.trim();
+        let startDate = document.getElementById("startDate").value;
+        let endDate = document.getElementById("endDate").value;
+        let checkboxes = document.querySelectorAll('.student-checkboxes input[type="checkbox"]:checked');
+        let isValid = true;
+
+        // Error elements
+        let errors = {
+            title: "taskTitleError",
+            description: "taskDescriptionError",
+            startDate: "startDateError",
+            endDate: "endDateError",
+            student: "studentError"
+        };
+
+        // Clear previous errors
+        Object.values(errors).forEach(id => document.getElementById(id).textContent = "");
+
+        if (!title) {
+            document.getElementById(errors.title).textContent = "Please enter a task title.";
+            isValid = false;
+        }
+
+        if (!description) {
+            document.getElementById(errors.description).textContent = "Please enter a task description.";
+            isValid = false;
+        }
+
+        if (!startDate) {
+            document.getElementById(errors.startDate).textContent = "Please select a start date.";
+            isValid = false;
+        }
+
+        if (!endDate) {
+            document.getElementById(errors.endDate).textContent = "Please select an end date.";
+            isValid = false;
+        }
+
+        if (startDate && endDate) {
+            let start = new Date(startDate);
+            let end = new Date(endDate);
+
+            if (start > end) {
+                document.getElementById(errors.endDate).textContent = "End date cannot be earlier than start date.";
+                isValid = false;
+            }
+        }
+
+        if (checkboxes.length === 0) {
+            document.getElementById(errors.student).textContent = "Please select at least one student.";
+            isValid = false;
+        }
+
+        return isValid;
+    }
+    function toggleSelectAll() {
+        let selectAllCheckbox = document.getElementById("selectAll");
+        let studentCheckboxes = document.querySelectorAll(".student-checkboxes input[type='checkbox']");
+
+        studentCheckboxes.forEach(checkbox => {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+    }
+
+</script>

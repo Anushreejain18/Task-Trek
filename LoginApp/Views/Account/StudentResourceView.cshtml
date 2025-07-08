@@ -1,0 +1,160 @@
+﻿@model IEnumerable<LoginApp.Models.Resource>
+@{
+    ViewBag.Title = "Student Resources";
+}
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #ecf0f1;
+    }
+
+    .dashboard-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 40px;
+        background: #ecf0f1;
+    }
+
+    .content-card {
+        width: 100vw;
+        height: 100vh;
+        background-color: #ecf0f1;
+        padding: 30px 40px;
+    }
+
+    .card-header {
+        font-size: 28px;
+        color: #2C3E50;
+        margin-top: -30px;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #2C3E50;
+        padding-bottom: 10px;
+    }
+    .resource-card {
+        margin-top: -10px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        padding: 5px;
+        margin-bottom: 10px; /* Increased spacing between cards */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+
+        .resource-card h4 {
+            margin-bottom: 2px;
+            color: #2C3E50;
+        }
+
+    .btn-submit {
+        background-color: #2C3E50;
+        color: #fff;
+        padding: 12px 20px;
+        font-size: 17px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        width: fit-content;
+        transition: background 0.3s ease;
+        margin-bottom: 5px;
+        margin-top:5px;
+    }
+
+        .btn-submit:hover {
+            background-color: #1a252f;
+        }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+    }
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: -15px;
+        }
+
+        .form-group textarea,
+        .form-group select {
+            padding: 10px;
+            margin-top: -20px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 2px solid #2C3E50;
+        }
+
+    .alert-info {
+        background-color: #d9edf7;
+        color: #31708f;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 15px;
+    }
+
+    .alert-success {
+        color: green;
+        font-weight: bold;
+        font-size: 14px;
+        margin-top: -32px;
+        margin-bottom: 5px;
+        text-align: center;
+    }
+</style>
+
+<div class="dashboard-wrapper">
+    <div class="content-card">
+        <h2 class="card-header">📖 Resources for Your Class</h2>
+
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["Message"]
+            </div>
+        }
+
+        @foreach (var item in Model)
+        {
+            <div class="resource-card">
+                <h4>@item.Title</h4>
+                <p>@item.Message</p>
+                <p><strong>Date:</strong> @item.UploadDate.ToShortDateString()</p>
+
+                @if (!string.IsNullOrEmpty(item.FilePath))
+                {
+                    <p><a href="@Url.Content(item.FilePath)" target="_blank">Download File</a></p>
+                }
+
+                @if (!string.IsNullOrEmpty(item.StudentComment))
+                {
+                    <div class="alert-info mt-2">
+                        <strong>Your Comment:</strong><br />
+                        @item.StudentComment
+                    </div>
+                }
+
+            </div>
+        }
+
+        <!-- General Comment Section for All Resources -->
+        <div class="card p-4 mt-4 border rounded shadow-sm">
+            <h4>💬 General Comment or Doubt</h4>
+            @using (Html.BeginForm("AddResourceComment", "Account", FormMethod.Post))
+            {
+                @Html.Hidden("resourceId", 0)
+
+                <div class="form-group mt-3">
+                    <label for="comment">Have a doubt or comment?</label>
+                    <textarea name="comment" class="form-control" id="comment" required placeholder="Enter your comment here..."></textarea>
+                    <span class="error-message" id="commentError"></span>
+                </div>
+
+                <button type="submit" class="btn-submit mt-3">💬 Submit Comment</button>
+            }
+        </div>
+    </div>
+</div>

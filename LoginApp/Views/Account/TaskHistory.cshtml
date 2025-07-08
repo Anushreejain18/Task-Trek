@@ -1,0 +1,134 @@
+﻿@model IEnumerable<LoginApp.Models.TaskRecord>
+
+@{
+    ViewBag.Title = "Task History";
+}
+
+<div class="dashboard-wrapper">
+    <div class="content-card">
+        <h2 class="card-header">📜 Task History</h2>
+
+        @if (!Model.Any())
+        {
+            <div class="alert alert-info text-center mt-3">
+                You have not been assigned any tasks yet.
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive mt-4">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                            <th>Reply</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var task in Model)
+                        {
+                            <tr>
+                                <td>@task.Title</td>
+                                <td>@task.Description</td>
+                                <td>@task.StartDate.ToString("dd-MM-yyyy")</td>
+                                <td>@task.EndDate.ToString("dd-MM-yyyy")</td>
+                                <td>
+                                    <span class="badge @(task.Status == "Completed" ? "bg-success" : task.Status == "Processing" ? "bg-warning text-dark" : "bg-secondary")">
+                                        @task.Status
+                                    </span>
+                                </td>
+                                <td>@task.Reply</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+<style>
+    /* Task History View Styling */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #ecf0f1;
+        margin: 0;
+        padding: 0;
+    }
+
+    .dashboard-wrapper {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+        background-color: #ecf0f1;
+        min-height: 100vh;
+    }
+
+    .content-card {
+        width: 100vw;
+        height: 100vh;
+        background-color: #ecf0f1;
+        padding: 30px 40px;
+    }
+
+    .card-header {
+        font-size: 28px;
+        color: #2C3E50;
+        margin-top: -30px;
+        margin-bottom: 40px;
+        border-bottom: 2px solid #2C3E50;
+        padding-bottom: 10px;
+    }
+
+    .success-message {
+        color: green;
+        font-weight: bold;
+        font-size: 14px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+        .table th, .table td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #2C3E50;
+            color: #ffffff;
+        }
+
+        .table tbody tr {
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table .badge {
+            padding: 10px 15px;
+            border-radius: 5px;
+            color: white;
+            display: inline-block;
+        }
+
+            .table .badge.bg-success {
+                background-color: forestgreen;
+            }
+
+            .table .badge.bg-warning {
+                background-color: dodgerblue;
+            }
+
+            .table .badge.bg-secondary {
+                background-color: yellow;
+            }
+
+</style>
