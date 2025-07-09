@@ -23,7 +23,6 @@ Task-Trek is a task management system built for teachers and students. It helps 
   - View task records and completion stats
 
 ---
-> Built as part of my learning journey in ASP.NET full-stack development.
 
 ## Tech Stack
 
@@ -31,3 +30,6 @@ Task-Trek is a task management system built for teachers and students. It helps 
 - SQL Server & Entity Framework  
 - HTML, CSS, Bootstrap  
 - Chart.js for graphs and analytics  
+
+---
+> Built as part of my learning journey in ASP.NET full-stack development.
