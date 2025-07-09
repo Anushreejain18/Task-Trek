@@ -56,7 +56,7 @@ namespace LoginApp.Controllers
                 return View();
             }
 
-            // ✅ Store additional session data after successful login
+            //  Store additional session data after successful login
             Session["UserRole"] = "Student";
             Session["Username"] = username;
             Session["StudentId"] = student.Id;
@@ -108,34 +108,25 @@ namespace LoginApp.Controllers
                                         .ToListAsync();
 
                 var studentsQuery = _context.Students.AsQueryable();
-
-                // Apply class filter if a class is selected
                 if (!string.IsNullOrEmpty(selectedClass))
                 {
                     studentsQuery = studentsQuery.Where(s => s.Class == selectedClass);
                 }
-
-                // Get total records after filtering
                 int totalRecords = await studentsQuery.CountAsync();
                 int totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
-
-                // Fetch students based on pagination
                 var students = await studentsQuery
-                    .OrderBy(s => s.Name) // Sort students (optional)
-                    .Skip((page - 1) * pageSize) // Skip records for previous pages
-                    .Take(pageSize) // Get only required records
+                    .OrderBy(s => s.Name) 
+                    .Skip((page - 1) * pageSize) 
+                    .Take(pageSize) 
                     .ToListAsync();
-
-                // Handle empty results
                 if (!students.Any())
                 {
                     TempData["Message"] = "No students found.";
                 }
 
-                // Pass necessary data to the view
                 ViewBag.CurrentPage = page;
                 ViewBag.TotalPages = totalPages;
-                ViewBag.SelectedClass = selectedClass; // Preserve selected class
+                ViewBag.SelectedClass = selectedClass; 
 
                 return View(students);
             }
@@ -147,7 +138,7 @@ namespace LoginApp.Controllers
         }
 
 
-        // Edit Student (GET)
+        // Edit Student 
         public async Task<ActionResult> EditStudent(int id)
         {
             var student = await _context.Students.FindAsync(id);
@@ -163,7 +154,7 @@ namespace LoginApp.Controllers
             ViewBag.Class = student.Class;
             ViewBag.Email = student.Email;
             ViewBag.Phone = student.Phone;
-            ViewBag.DateOfBirth = student.DateOfBirth.ToString("yyyy-MM-dd"); // date format for input[type=date]
+            ViewBag.DateOfBirth = student.DateOfBirth.ToString("yyyy-MM-dd"); 
             ViewBag.Username = student.Username;
             ViewBag.Password = student.Password;
 
@@ -270,7 +261,6 @@ namespace LoginApp.Controllers
             _context.TaskRecords.AddRange(taskRecords);
             await _context.SaveChangesAsync();
 
-            // Add notifications for assigned students
             foreach (var student in assignedStudentDetails)
             {
                 await AddNotification(student.Username, "Student", $"New task assigned: {task.Title}", task.TaskId);
@@ -279,7 +269,6 @@ namespace LoginApp.Controllers
             return RedirectToAction("AddTasks");
         }
 
-        // GET: Task/GetStudentsByClass
         [HttpGet]
         public async Task<JsonResult> GetStudentsByClass(string selectedClass)
         {
@@ -303,10 +292,10 @@ namespace LoginApp.Controllers
                 .Include(tr => tr.Task)
                 .AsQueryable();
 
-            // 🔍 Apply search filter
+        
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                searchTerm = searchTerm.ToLower(); // Case-insensitive search
+                searchTerm = searchTerm.ToLower();
                 taskRecords = taskRecords.Where(tr =>
                     (tr.Title ?? "").ToLower().Contains(searchTerm) ||
                     (tr.StudentName ?? "").ToLower().Contains(searchTerm) ||
@@ -315,35 +304,29 @@ namespace LoginApp.Controllers
                 );
             }
 
-            // 🔍 Apply class filter
             if (!string.IsNullOrWhiteSpace(selectedClass) && selectedClass.ToLower() != "all")
             {
                 taskRecords = taskRecords.Where(tr => tr.Class.ToLower() == selectedClass.ToLower());
             }
 
-            // ✅ Get total count for pagination
             int totalRecords = await taskRecords.CountAsync();
 
-            // ✅ Apply pagination
             var result = await taskRecords
                 .OrderBy(tr => tr.TaskRecordId)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
-            // ✅ Get distinct class names for dropdown
             ViewBag.Classes = await _context.TaskRecords
                                     .Select(tr => tr.Class)
                                     .Distinct()
                                     .ToListAsync();
 
-            // ✅ Set pagination details
             ViewBag.SearchTerm = searchTerm;
             ViewBag.SelectedClass = selectedClass;
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
 
-            // ✅ Handle AJAX request (return only table)
             if (HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
                 return PartialView("_TaskRecordTable", result);
@@ -375,7 +358,7 @@ namespace LoginApp.Controllers
             return PartialView("_TaskRecordTable", result); // Ensure this partial view exists
         }
 
-        // GET: StudentTasks
+        // StudentTasks
         public async Task<ActionResult> StudentTasks(int? selectedTaskId)
         {
             var username = Session["Username"]?.ToString();
@@ -398,7 +381,6 @@ namespace LoginApp.Controllers
 
             ViewBag.StudentTasks = studentTasks;
 
-            // Ensure that a selected task is properly assigned
             if (selectedTaskId.HasValue)
             {
                 ViewBag.SelectedTask = studentTasks.FirstOrDefault(t => t.TaskRecordId == selectedTaskId.Value);
@@ -408,7 +390,6 @@ namespace LoginApp.Controllers
         }
 
 
-        // POST: StudentTasks
         [HttpPost]
         public async Task<ActionResult> StudentTasks(
          int taskIds,
@@ -439,26 +420,21 @@ namespace LoginApp.Controllers
                 taskRecord.Status = statuses;
                 taskRecord.Reply = replies;
 
-                // Handle file upload only if status is "Completed"
                 if (statuses == "Completed" && files != null && files.ContentLength > 0)
                 {
                     string fileName = Path.GetFileName(files.FileName);
                     string filePath = Path.Combine(Server.MapPath("~/Uploads"), fileName);
 
-                    // Ensure the directory exists
                     Directory.CreateDirectory(Server.MapPath("~/Uploads"));
 
-                    // Save the file
                     files.SaveAs(filePath);
 
-                    // Store relative path in database
                     taskRecord.FilePath = "/Uploads/" + fileName;
                 }
 
                 _context.Entry(taskRecord).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
 
-                // Notify the teacher about the update
                 await AddNotification("teacher", "Teacher", $"Task updated by {taskRecord.StudentName}: {taskRecord.Title}", taskRecord.TaskId);
 
                 TempData["SuccessMessage"] = "Task updated successfully!";
@@ -562,7 +538,6 @@ namespace LoginApp.Controllers
             await _context.SaveChangesAsync();
         }
 
-        // View unread notifications with pagination
         public async Task<ActionResult> Notifications(int page = 1, int pageSize = 5)
         {
             var username = Session["Username"]?.ToString();
@@ -573,7 +548,6 @@ namespace LoginApp.Controllers
                 return RedirectToAction("Login");
             }
 
-            // Fetch only unread notifications
             var query = _context.Notifications
                 .Where(n => n.Username == username && n.UserRole == userRole && !n.IsRead)
                 .OrderByDescending(n => n.CreatedAt);
@@ -592,7 +566,6 @@ namespace LoginApp.Controllers
             return View(notifications);
         }
 
-        // Mark notification as read
         [HttpPost]
         public async Task<ActionResult> MarkNotificationAsRead(int notificationId)
         {
@@ -605,7 +578,7 @@ namespace LoginApp.Controllers
             return RedirectToAction("Notifications");
         }
 
-        // Fetch unread notification count (AJAX support)
+      
         [HttpGet]
         public async Task<JsonResult> GetUnreadNotificationCount()
         {
@@ -629,7 +602,7 @@ namespace LoginApp.Controllers
             if (Session["UserRole"]?.ToString() != "Teacher")
                 return RedirectToAction("Login");
 
-            // Fetch all unique classes from TaskRecords
+           
             var classList = await _context.TaskRecords
                 .Where(tr => !string.IsNullOrEmpty(tr.Class))
                 .Select(tr => tr.Class)
@@ -639,14 +612,13 @@ namespace LoginApp.Controllers
 
             ViewBag.Classes = classList;
 
-            // If no class selected, auto-select the first one
+            
             if (string.IsNullOrEmpty(selectedClass) && classList.Any())
             {
                 selectedClass = classList.First();
                 return RedirectToAction("Dashboard", new { selectedClass });
             }
-
-            // If still null (e.g., no classes at all), return empty dashboard
+       
             if (string.IsNullOrEmpty(selectedClass))
             {
                 ViewBag.SelectedClass = null;
@@ -658,8 +630,7 @@ namespace LoginApp.Controllers
                 ViewBag.Notifications = new List<TaskRecord>();
                 return View();
             }
-
-            // Filter TaskRecords for selected class
+      
             var records = await _context.TaskRecords
                                     .Where(tr => tr.Class == selectedClass)
                                     .ToListAsync();
@@ -668,13 +639,11 @@ namespace LoginApp.Controllers
             var pendingTasks = records.Count(tr => tr.Status == "Pending");
             var completedTasks = records.Count(tr => tr.Status == "Completed");
 
-            // Unique students based on roll number
             var totalStudents = records
                                 .Select(tr => tr.RollNumber)
                                 .Distinct()
                                 .Count();
 
-            // Notifications - recent replies or completions
             var notifications = records
                 .Where(tr => !string.IsNullOrEmpty(tr.Reply) || tr.Status == "Completed")
                 .OrderByDescending(tr => tr.EndDate)
@@ -685,19 +654,16 @@ namespace LoginApp.Controllers
                 ? (double)completedTasks / totalTasks * 100
                 : 0;
 
-            // Upcoming tasks (next 3 days)
             var upcomingTasks = records
                 .Where(tr => tr.EndDate >= DateTime.Today && tr.EndDate <= DateTime.Today.AddDays(3))
                 .ToList();
 
-            // Top performing students (students with all completed tasks)
             var topStudents = records
                 .GroupBy(tr => tr.StudentName)
                 .Where(g => g.All(tr => tr.Status == "Completed") && g.Count() > 0)
                 .Select(g => g.Key)
                 .ToList();
 
-            // Pass data to view
             ViewBag.SelectedClass = selectedClass;
             ViewBag.TotalStudents = totalStudents;
             ViewBag.TotalTasks = totalTasks;
@@ -711,7 +677,7 @@ namespace LoginApp.Controllers
             return View();
         }
 
-        // GET: /Account/StudentProfile
+        // StudentProfile
         public async Task<ActionResult> StudentProfile()
         {
             if (Session["UserRole"]?.ToString() != "Student" || Session["Username"] == null)
@@ -737,7 +703,6 @@ namespace LoginApp.Controllers
             return View(student);
         }
 
-        // POST: /Account/UpdateStudentProfile
         [HttpPost]
         public async Task<ActionResult> UpdateStudentProfile(Student updatedStudent)
         {
@@ -776,7 +741,6 @@ namespace LoginApp.Controllers
                 return RedirectToAction("StudentLog");
             }
 
-            // Fetch only tasks assigned to the current student
             var taskRecords = await _context.TaskRecords
                 .Where(t => t.StudentName == username)
                 .OrderByDescending(t => t.EndDate)
@@ -784,19 +748,17 @@ namespace LoginApp.Controllers
 
             return View(taskRecords);
         }
-        // GET: Teacher Upload Resource
+        //  Teacher Upload Resource
         public ActionResult UploadResource()
         {
             return View();
         }
 
-        // POST: Upload Resource
         [HttpPost]
         public async Task<ActionResult> UploadResource(Resource model, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
-                // Handle file upload
                 if (file != null && file.ContentLength > 0)
                 {
                     string fileName = Path.GetFileName(file.FileName);
@@ -812,15 +774,12 @@ namespace LoginApp.Controllers
                     model.FilePath = "~/Uploads/" + fileName;
                 }
 
-                // Additional fields
                 model.UploadDate = DateTime.Now;
                 model.UploadedBy = "Teacher";
 
-                // Save resource to database
                 _context.Resources.Add(model);
                 await _context.SaveChangesAsync();
 
-                // ✅ Notify students in the same class
                 var students = _context.Students.Where(s => s.Class == model.Class).ToList();
 
                 foreach (var student in students)
@@ -845,7 +804,7 @@ namespace LoginApp.Controllers
             return View(model);
         }
 
-        // GET: Student Resource View
+        // Student Resource View
         public async Task<ActionResult> StudentResourceView()
         {
             var username = Session["Username"]?.ToString();
@@ -861,10 +820,9 @@ namespace LoginApp.Controllers
 
             var classResources = await _context.Resources
                 .Where(r => r.Class == student.Class)
-                .OrderByDescending(r => r.UploadDate)  // Ensure resources are ordered by date
+                .OrderByDescending(r => r.UploadDate)  
                 .ToListAsync();
 
-            // Check if no resources are found for this class
             if (classResources.Count == 0)
             {
                 TempData["NoResources"] = "No resources found for your class.";
@@ -885,20 +843,18 @@ namespace LoginApp.Controllers
 
                 if (resourceId > 0)
                 {
-                    // Comment on a specific resource
                     var resource = await _context.Resources.FindAsync(resourceId);
                     if (resource != null)
                     {
                         resource.StudentComment = fullComment;
                         await _context.SaveChangesAsync();
 
-                        // Send notification to teacher
                         var notification = new Notification
                         {
                             Message = notificationMessage,
                             CreatedAt = DateTime.Now,
                             UserRole = "Teacher",
-                            Username = "teacher", // Replace with actual teacher username if needed
+                            Username = "teacher", 
                             IsRead = false
                         };
 
@@ -910,7 +866,6 @@ namespace LoginApp.Controllers
                 }
                 else
                 {
-                    // General comment not tied to any specific resource
                     var generalResource = new Resource
                     {
                         Title = "General Comment",
@@ -922,7 +877,6 @@ namespace LoginApp.Controllers
 
                     _context.Resources.Add(generalResource);
 
-                    // Send notification to teacher
                     var notification = new Notification
                     {
                         Message = notificationMessage,
@@ -943,7 +897,7 @@ namespace LoginApp.Controllers
         }
 
 
-        // GET: Teacher View Comments
+        // Teacher View Comments
         public ActionResult ViewComments()
         {
             var comments = _context.Resources
