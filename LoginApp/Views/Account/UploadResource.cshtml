@@ -1,0 +1,158 @@
+﻿@model LoginApp.Models.Resource
+
+@{
+    ViewBag.Title = "Upload Resource";
+}
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #ecf0f1;
+    }
+
+    .dashboard-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 40px;
+        background: #ecf0f1;
+    }
+
+    .content-card {
+        width: 100vw;
+        height: 100vh;
+        background-color: #ecf0f1;
+        padding: 30px 40px;
+    }
+
+    .card-header {
+        font-size: 28px;
+        color: #2C3E50;
+        margin-top: -30px;
+        margin-bottom: 80px;
+        border-bottom: 2px solid #2C3E50;
+        padding-bottom: 10px;
+    }
+
+    .form-container {
+        display: flex;
+        gap: 40px;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+    }
+
+    .form-section {
+        flex: 1;
+        min-width: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2C3E50;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px 12px;
+            font-size: 15px;
+            border: 2px solid #2C3E50;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+    .btn-submit {
+        background-color: #2C3E50;
+        color: #fff;
+        padding: 12px 20px;
+        font-size: 17px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        width: fit-content;
+        transition: background 0.3s ease;
+        margin: 0 auto;
+        display: block;
+    }
+
+        .btn-submit:hover {
+            background-color: #1a252f;
+        }
+
+    .success-message {
+        color: green;
+        font-weight: bold;
+        font-size: 14px;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+</style>
+
+<div class="dashboard-wrapper">
+    <div class="content-card">
+        <h2 class="card-header">⬆️ Upload Resource</h2>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="success-message">@TempData["Success"]</div>
+        }
+
+        @using (Html.BeginForm("UploadResource", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="form-container">
+                <!-- Left Section -->
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>Title</label>
+                        @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+                    </div>
+
+                    <div class="form-group">
+                        <label>Message</label>
+                        @Html.TextAreaFor(m => m.Message, new { @class = "form-control", rows = 5 })
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload File (Optional)</label>
+                        <input type="file" name="file" class="form-control" />
+                    </div>
+                </div>
+
+                <!-- Right Section -->
+                <div class="form-section">
+                    <div class="form-group">
+                        <label for="class">Class</label>
+                        <select id="class" name="Class" class="form-control">
+                            <option value="">Select Class</option>
+                            <option value="CS">Computer Science</option>
+                            <option value="IS">Information Science</option>
+                            <option value="ECE">Electronics & Communication</option>
+                            <option value="Mechatronics">Mechatronics</option>
+                            <option value="AIML">Artificial Intelligence & ML</option>
+                            <option value="CS IoT">CS IoT</option>
+                            <option value="Mechanical">Mechanical Engineering</option>
+                            <option value="Aeronautical">Aeronautical Engineering</option>
+                            <option value="Civil">Civil Engineering</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload Button Below -->
+            <button type="submit" class="btn-submit">Upload</button>
+        }
+    </div>
+</div>

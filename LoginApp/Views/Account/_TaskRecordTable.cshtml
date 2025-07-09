@@ -1,0 +1,35 @@
+﻿@model List<LoginApp.Models.TaskRecord>
+
+<tbody id="taskTableBody">
+    @if (Model != null && Model.Any())
+    {
+        foreach (var task in Model)
+        {
+            <tr>
+                <td>@(task.Title ?? "N/A")</td>
+                <td>@(task.Description ?? "N/A")</td>
+                <td>@(task.StudentName ?? "N/A")</td>
+                <td>@(task.Class ?? "N/A")</td>
+                <td>@(task.RollNumber ?? "N/A")</td>
+                <td>@(task.StartDate.ToString("dd MMMyyyy") ?? "N/A")</td>
+                <td>@(task.EndDate.ToString("dd MMMyyyy") ?? "N/A")</td>
+                <td>@(!string.IsNullOrEmpty(task.Status) ? task.Status : "Not Updated")</td>
+                <td>@(!string.IsNullOrEmpty(task.Reply) ? task.Reply : "No Reply")</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(task.FilePath) && task.Status == "Completed")
+                    {
+                        <a href="@Url.Content(task.FilePath)" target="_blank">Download File</a>
+                    }
+                    else
+                    {
+                        <span>No File</span>
+                    }
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr><td colspan="10" class="empty-message">No tasks found</td></tr>
+    }
+</tbody>

@@ -1,0 +1,325 @@
+﻿
+@{
+    ViewBag.Title = "Edit Student";
+}
+
+<div class="dashboard-wrapper">
+    <div class="content-card">
+        <h2 class="card-header">🖊️ Edit Student Details</h2>
+
+        @if (ViewBag.Error != null)
+        {
+        <div class="error-message">@ViewBag.Error</div>
+        }
+        @if (TempData["Message"] != null)
+        {
+        <div class="success-message">@TempData["Message"]</div>
+        }
+
+        <form method="post" action="@Url.Action("EditStudent", "Account" )" onsubmit="return validateForm()">
+            <input type="hidden" name="StudentId" value="@ViewBag.StudentId" />
+
+            <div class="form-container">
+                <div class="form-columns">
+                    <!-- Left Side -->
+                    <div class="form-column">
+                        <div class="form-group">
+                            <label for="Name">Student Name:</label>
+                            <input type="text" id="Name" name="Name" value="@ViewBag.Name" />
+                            <span class="error-message" id="studentNameError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="RollNo">Roll No:</label>
+                            <input type="text" id="RollNo" name="RollNo" value="@ViewBag.RollNo" />
+                            <span class="error-message" id="rollNumberError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="class">Class</label>
+                            <select id="class" name="Class" onchange="toggleClassInput()">
+                                <option value="">Select Class</option>
+                                <option value="CS" @(ViewBag.Class == "CS" ? "selected" : "" )>Computer Science</option>
+                                <option value="IS" @(ViewBag.Class == "IS" ? "selected" : "" )>Information Science</option>
+                                <option value="ECE" @(ViewBag.Class == "ECE" ? "selected" : "" )>Electronics & Communication</option>
+                                <option value="Mechatronics" @(ViewBag.Class == "Mechatronics" ? "selected" : "" )>Mechatronics</option>
+                                <option value="AIML" @(ViewBag.Class == "AIML" ? "selected" : "" )>Artificial Intelligence & ML</option>
+                                <option value="CS IoT" @(ViewBag.Class == "CS IoT" ? "selected" : "" )>CS IoT</option>
+                                <option value="Mechanical" @(ViewBag.Class == "Mechanical" ? "selected" : "" )>Mechanical Engineering</option>
+                                <option value="Aeronautical" @(ViewBag.Class == "Aeronautical" ? "selected" : "" )>Aeronautical Engineering</option>
+                                <option value="Civil" @(ViewBag.Class == "Civil" ? "selected" : "" )>Civil Engineering</option>
+                                <option value="Other" @(ViewBag.Class == "Other" ? "selected" : "" )>Other</option>
+                            </select>
+                            <input type="text" id="otherClass" name="OtherClass" placeholder="Enter your class" style="display: none;" />
+                            <span class="error-message" id="classError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Email">Email:</label>
+                            <input type="email" id="Email" name="Email" value="@ViewBag.Email" />
+                            <span class="error-message" id="emailError"></span>
+                        </div>
+                    </div>
+
+                    <!-- Right Side -->
+                    <div class="form-column">
+                        <div class="form-group">
+                            <label for="Phone">Phone Number:</label>
+                            <input type="text" id="Phone" name="Phone" value="@ViewBag.Phone" />
+                            <span class="error-message" id="phoneError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="DateOfBirth">Date of Birth:</label>
+                            <input type="date" id="DateOfBirth" name="DateOfBirth" value="@ViewBag.DateOfBirth" />
+                            <span class="error-message" id="dobError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Username">Username:</label>
+                            <input type="text" id="Username" name="Username" value="@ViewBag.Username" />
+                            <span class="error-message" id="usernameError"></span>
+                        </div>
+
+                        <div class="form-group password-container">
+                            <label for="Password">Password:</label>
+                            <input type="password" id="Password" name="Password" value="@ViewBag.Password" />
+                            <span class="toggle-password" onclick="togglePassword()">
+                                <img id="eyeIcon" src="https://cdn-icons-png.flaticon.com/512/159/159604.png" alt="Show" />
+                            </span>
+                            <span class="error-message" id="passwordError"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Buttons -->
+                <div class="form-row">
+                    <a href="@Url.Action("ResetPassword", "Account" , new { id=ViewBag.StudentId })" class="reset-password-link">Reset Password</a>
+                </div>
+
+                <div class="form-row button-group">
+                    <button type="submit" class="btn-submit">Update Student</button>
+                    <a href="@Url.Action("StudentList", "Account" )" class="btn-cancel">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function validateForm() {
+        let isValid = true;
+        let username = document.getElementById("Username").value.trim();
+        let password = document.getElementById("Password").value.trim();
+        let classSelect = document.getElementById("class");
+        let otherClassInput = document.getElementById("otherClass");
+
+        document.getElementById("usernameError").textContent = "";
+        document.getElementById("passwordError").textContent = "";
+        document.getElementById("classError").textContent = "";
+
+        if (username === "") {
+            document.getElementById("usernameError").textContent = "Enter username.";
+            isValid = false;
+        }
+
+        if (password !== "" && password.length < 6) {
+            document.getElementById("passwordError").textContent = "Min 6 characters.";
+            isValid = false;
+        }
+
+        if (classSelect.value === "Other" && otherClassInput.value.trim() === "") {
+            document.getElementById("classError").textContent = "Enter your class.";
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function toggleClassInput() {
+        let classSelect = document.getElementById("class");
+        let otherClassInput = document.getElementById("otherClass");
+        otherClassInput.style.display = classSelect.value === "Other" ? "block" : "none";
+    }
+
+    function togglePassword() {
+        let passwordField = document.getElementById("Password");
+        let eyeIcon = document.getElementById("eyeIcon");
+        passwordField.type = passwordField.type === "password" ? "text" : "password";
+        eyeIcon.src = passwordField.type === "password" ? "https://cdn-icons-png.flaticon.com/512/159/159604.png" : "https://cdn-icons-png.flaticon.com/512/159/159605.png";
+    }
+</script>
+
+<style>
+    /* Reset & General Styling */
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #ecf0f1;
+    }
+
+    /* Form Container Centering */
+    .dashboard-wrapper {
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+        background: #ecf0f1;
+    }
+
+    .content-card {
+        width: 100vw;
+        height: 100vh;
+        background-color: #ecf0f1;
+        padding: 30px 40px;
+    }
+
+    .card-header {
+        font-size: 28px;
+        color: #2C3E50;
+        margin-top: -30px;
+        margin-bottom: 70px;
+        border-bottom: 2px solid #2C3E50;
+        margin-bottom: 30px;
+    }
+
+    /* Layout for rows */
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .form-columns {
+        display: flex;
+        justify-content: space-between;
+        gap: 40px;
+        flex-wrap: wrap;
+    }
+
+    .form-column {
+        flex: 1;
+        min-width: 300px;
+    }
+
+    .password-container {
+        position: relative;
+    }
+
+    .toggle-password {
+        position: absolute;
+        top: 36px;
+        right: 12px;
+        cursor: pointer;
+    }
+
+        .toggle-password img {
+            width: 18px;
+            height: 18px;
+        }
+
+
+    .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+    }
+
+    .form-group {
+        flex: 1 1 30%;
+        display: flex;
+        flex-direction: column;
+        min-width: 250px;
+    }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2C3E50;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 10px;
+            font-size: 14px;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+        }
+
+            .form-group input:focus,
+            .form-group select:focus {
+                border-color: #2C3E50;
+                outline: none;
+            }
+
+    /* Button Group */
+    .button-group {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        margin-top: 10px;
+    }
+
+    .btn-submit,
+    .btn-cancel {
+        padding: 10px 20px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .btn-submit {
+        background-color: #2C3E50;
+        color: #fff;
+    }
+
+        .btn-submit:hover {
+            background-color: #1a252f;
+        }
+
+    .btn-cancel {
+        background-color: #888;
+        color: #fff;
+        text-decoration: none;
+        line-height: 32px;
+        padding: 10px 20px;
+    }
+
+        .btn-cancel:hover {
+            background-color: #666;
+        }
+
+    /* Reset Password Link */
+    .reset-password-link {
+        color: #2C3E50;
+        font-weight: 600;
+        text-decoration: none;
+        margin-top: 15px;
+        display: inline-block;
+    }
+
+        .reset-password-link:hover {
+            text-decoration: underline;
+        }
+
+    /* Error & Success */
+    .error-message {
+        color: red;
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    .success-message {
+        color: green;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+</style>
+
+
+

@@ -1,0 +1,181 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Anushree\\source\\repos\\LoginApp\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{74CF7778-80B7-48DD-B4EF-52DCF4B2184D}|LoginApp\\LoginApp1.csproj|c:\\users\\anushree\\onedrive\\documents\\desktop\\internship\\app\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{74CF7778-80B7-48DD-B4EF-52DCF4B2184D}|LoginApp\\LoginApp1.csproj|c:\\users\\anushree\\source\\repos\\loginapp\\loginapp\\views\\account\\studentlog.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{74CF7778-80B7-48DD-B4EF-52DCF4B2184D}|LoginApp\\LoginApp1.csproj|solutionrelative:loginapp\\views\\account\\studentlog.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{74CF7778-80B7-48DD-B4EF-52DCF4B2184D}|LoginApp\\LoginApp1.csproj|c:\\users\\anushree\\source\\repos\\loginapp\\loginapp\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{74CF7778-80B7-48DD-B4EF-52DCF4B2184D}|LoginApp\\LoginApp1.csproj|solutionrelative:loginapp\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{74CF7778-80B7-48DD-B4EF-52DCF4B2184D}|LoginApp\\LoginApp1.csproj|c:\\users\\anushree\\source\\repos\\loginapp\\loginapp\\views\\account\\forgotpassword.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{74CF7778-80B7-48DD-B4EF-52DCF4B2184D}|LoginApp\\LoginApp1.csproj|solutionrelative:loginapp\\views\\account\\forgotpassword.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{74CF7778-80B7-48DD-B4EF-52DCF4B2184D}|LoginApp\\LoginApp1.csproj|c:\\users\\anushree\\source\\repos\\loginapp\\loginapp\\views\\account\\editstudent.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{74CF7778-80B7-48DD-B4EF-52DCF4B2184D}|LoginApp\\LoginApp1.csproj|solutionrelative:loginapp\\views\\account\\editstudent.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{74CF7778-80B7-48DD-B4EF-52DCF4B2184D}|LoginApp\\LoginApp1.csproj|c:\\users\\anushree\\source\\repos\\loginapp\\loginapp\\views\\account\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{74CF7778-80B7-48DD-B4EF-52DCF4B2184D}|LoginApp\\LoginApp1.csproj|solutionrelative:loginapp\\views\\account\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{74CF7778-80B7-48DD-B4EF-52DCF4B2184D}|LoginApp\\LoginApp1.csproj|c:\\users\\anushree\\source\\repos\\loginapp\\loginapp\\views\\account\\addtasks.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{74CF7778-80B7-48DD-B4EF-52DCF4B2184D}|LoginApp\\LoginApp1.csproj|solutionrelative:loginapp\\views\\account\\addtasks.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{74CF7778-80B7-48DD-B4EF-52DCF4B2184D}|LoginApp\\LoginApp1.csproj|c:\\users\\anushree\\source\\repos\\loginapp\\loginapp\\views\\account\\addstudent.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{74CF7778-80B7-48DD-B4EF-52DCF4B2184D}|LoginApp\\LoginApp1.csproj|solutionrelative:loginapp\\views\\account\\addstudent.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 325,
+          "SelectedChildIndex": 8,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "StudentLog.cshtml",
+              "DocumentMoniker": "C:\\Users\\Anushree\\source\\repos\\LoginApp\\LoginApp\\Views\\Account\\StudentLog.cshtml",
+              "RelativeDocumentMoniker": "LoginApp\\Views\\Account\\StudentLog.cshtml",
+              "ToolTip": "C:\\Users\\Anushree\\source\\repos\\LoginApp\\LoginApp\\Views\\Account\\StudentLog.cshtml",
+              "RelativeToolTip": "LoginApp\\Views\\Account\\StudentLog.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-28T06:54:43.501Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\Anushree\\source\\repos\\LoginApp\\LoginApp\\Views\\Account\\Login.cshtml",
+              "RelativeDocumentMoniker": "LoginApp\\Views\\Account\\Login.cshtml",
+              "ToolTip": "C:\\Users\\Anushree\\source\\repos\\LoginApp\\LoginApp\\Views\\Account\\Login.cshtml",
+              "RelativeToolTip": "LoginApp\\Views\\Account\\Login.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-28T06:54:39.741Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ForgotPassword.cshtml",
+              "DocumentMoniker": "C:\\Users\\Anushree\\source\\repos\\LoginApp\\LoginApp\\Views\\Account\\ForgotPassword.cshtml",
+              "RelativeDocumentMoniker": "LoginApp\\Views\\Account\\ForgotPassword.cshtml",
+              "ToolTip": "C:\\Users\\Anushree\\source\\repos\\LoginApp\\LoginApp\\Views\\Account\\ForgotPassword.cshtml",
+              "RelativeToolTip": "LoginApp\\Views\\Account\\ForgotPassword.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-28T06:54:38.722Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "EditStudent.cshtml",
+              "DocumentMoniker": "C:\\Users\\Anushree\\source\\repos\\LoginApp\\LoginApp\\Views\\Account\\EditStudent.cshtml",
+              "RelativeDocumentMoniker": "LoginApp\\Views\\Account\\EditStudent.cshtml",
+              "ToolTip": "C:\\Users\\Anushree\\source\\repos\\LoginApp\\LoginApp\\Views\\Account\\EditStudent.cshtml",
+              "RelativeToolTip": "LoginApp\\Views\\Account\\EditStudent.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-28T06:54:37.656Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Dashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\Anushree\\source\\repos\\LoginApp\\LoginApp\\Views\\Account\\Dashboard.cshtml",
+              "RelativeDocumentMoniker": "LoginApp\\Views\\Account\\Dashboard.cshtml",
+              "ToolTip": "C:\\Users\\Anushree\\source\\repos\\LoginApp\\LoginApp\\Views\\Account\\Dashboard.cshtml",
+              "RelativeToolTip": "LoginApp\\Views\\Account\\Dashboard.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-28T06:54:36.437Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AddTasks.cshtml",
+              "DocumentMoniker": "C:\\Users\\Anushree\\source\\repos\\LoginApp\\LoginApp\\Views\\Account\\AddTasks.cshtml",
+              "RelativeDocumentMoniker": "LoginApp\\Views\\Account\\AddTasks.cshtml",
+              "ToolTip": "C:\\Users\\Anushree\\source\\repos\\LoginApp\\LoginApp\\Views\\Account\\AddTasks.cshtml",
+              "RelativeToolTip": "LoginApp\\Views\\Account\\AddTasks.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-28T06:54:34.47Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AddStudent.cshtml",
+              "DocumentMoniker": "C:\\Users\\Anushree\\source\\repos\\LoginApp\\LoginApp\\Views\\Account\\AddStudent.cshtml",
+              "RelativeDocumentMoniker": "LoginApp\\Views\\Account\\AddStudent.cshtml",
+              "ToolTip": "C:\\Users\\Anushree\\source\\repos\\LoginApp\\LoginApp\\Views\\Account\\AddStudent.cshtml",
+              "RelativeToolTip": "LoginApp\\Views\\Account\\AddStudent.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-28T06:54:32.447Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Users\\Anushree\\OneDrive\\Documents\\Desktop\\Internship\\App\\AccountController.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\OneDrive\\Documents\\Desktop\\Internship\\App\\AccountController.cs",
+              "ToolTip": "C:\\Users\\Anushree\\OneDrive\\Documents\\Desktop\\Internship\\App\\AccountController.cs",
+              "RelativeToolTip": "..\\..\\..\\OneDrive\\Documents\\Desktop\\Internship\\App\\AccountController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-28T06:53:39.108Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedHeight": 75,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{a80febb4-e7e0-4147-b476-21aaf2453969}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,228 @@
+﻿
+@{
+    ViewBag.Title = "Welcome to TrackEdge";
+    Layout = null;
+}
+
+<div class="welcome-container">
+    <!-- Logo Section -->
+    <div class="header">
+        <div class="logo-container">
+            <img src="~/Content/images/l1.jpg" alt="TrackEdge Logo" class="logo">
+        </div>
+        <div class="header-text">
+            <h1>Welcome to TrackEdge</h1>
+            <p class="subtitle">Effortlessly manage tasks and boost productivity</p>
+        </div>
+    </div>
+
+    <!-- Image Banner -->
+    <div class="image-banner">
+        <img src="~/Content/Images/task_overview.png" alt="Task Management Overview" class="banner-img">
+    </div>
+
+    <!-- About Section -->
+    <div class="about-section">
+        <h2>Why Choose TrackEdge?</h2>
+        <p>
+            TrackEdge is an advanced task management system designed to simplify task assignments and progress tracking.
+            It allows teachers to assign tasks, set deadlines, and monitor students' progress efficiently.
+        </p>
+
+        <div class="features-container">
+            <div class="feature">
+                <img src="~/Content/Images/task.png" alt="Task Management" class="feature-icon">
+                <p><strong>Task Management:</strong> Assign and track tasks with ease.</p>
+            </div>
+            <div class="feature">
+                <img src="~/Content/Images/progress.png" alt="Progress Tracking" class="feature-icon">
+                <p><strong>Progress Tracking:</strong> Monitor student submissions in real-time.</p>
+            </div>
+            <div class="feature">
+                <img src="~/Content/Images/communication.png" alt="Communication" class="feature-icon">
+                <p><strong>Communication:</strong> Direct teacher-student interaction through task updates.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Section -->
+    <div class="welcome-content">
+        <a href="@Url.Action("LoginPage", "Home")" class="btn-link">Go to Login Page</a>
+    </div>
+</div>
+
+<!-- Styling -->
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+        background: #F0F2F5;
+    }
+
+    .welcome-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 100vw;
+        height: 100vh; /* Ensure full screen */
+        background: #FFFFFF;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    /* Header Section */
+    .header {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #2C3E50; /* Match with logo background */
+        padding: 20px;
+    }
+
+    .logo {
+        height: 60px;
+    }
+
+    .logo-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        background: white; /* White background */
+        border-radius: 50%; /* Optional: Makes the background circular */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for visibility */
+    }
+
+        .logo-container img {
+            width: 80px; /* Adjust based on your logo size */
+            height: auto;
+            object-fit: contain; /* Ensures the image fits within the container */
+            background: white; /* Ensures the image itself has a white background */
+            padding: 5px;
+            border-radius: 10px; /* Optional: If your logo needs rounded corners */
+        }
+
+
+    .header-text {
+        display: flex;
+        flex-direction: column;
+        color: white;
+    }
+
+    .header h1 {
+        font-size: 32px;
+        margin: 0;
+    }
+
+    .subtitle {
+        font-size: 18px;
+        font-weight: 400;
+    }
+
+    /* Image Banner */
+    .image-banner {
+        width: 35%;
+    }
+
+    .banner-img {
+        width: 35%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    /* About Section */
+    .about-section {
+        text-align: center;
+        margin-top: -30px;
+        padding: 20px;
+        width: 80%;
+    }
+
+    .features-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .feature {
+        width: 200px;
+        text-align: center;
+    }
+
+    .feature-icon {
+        width: 60px;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    /* Login Button */
+    .welcome-content {
+        margin-top: 20px;
+    }
+
+    .btn-link {
+        padding: 16px 50px;
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 12px;
+        background: #2C3E50;
+        color: white;
+        box-shadow: 0px 8px 20px rgba(44, 62, 80, 0.5);
+        transition: all 0.3s ease;
+    }
+
+        .btn-link:hover {
+            background: #3E5668;
+            transform: translateY(-5px);
+        }
+
+
+
+    /* Features Section */
+    /* Feature Section */
+    .features-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+        flex-wrap: wrap; /* Ensures responsiveness */
+        margin-top: 20px;
+        padding: 20px;
+        width: 100%;
+        margin-top: 20px; /* Moves the image down */
+        max-width: 1200px; /* Keeps it centered */
+    }
+
+    /* Individual Feature Box */
+    .feature-box {
+        width: 250px; /* Adjust width */
+        padding: 20px;
+        background: #f8f9fa; /* Light background */
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+    /* Feature Icon */
+    .feature-icon {
+        width: 100px;
+        height: 100px;
+        margin-bottom: -20px;
+    }
+
+    .progress-tracking-img {
+        margin-top: 70px; /* Moves the image down */
+    }
+</style>

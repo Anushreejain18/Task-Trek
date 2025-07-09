@@ -1,0 +1,218 @@
+﻿
+@{
+    ViewBag.Title = "Student Login";
+}
+
+<div class="login-container">
+    <div class="login-header">
+        <h1>Student Login</h1>
+    </div>
+
+    @if (!string.IsNullOrEmpty(ViewBag.Error))
+    {
+    <p class="error">@ViewBag.Error</p>
+    }
+
+    <div class="login-content">
+        <form id="loginForm" method="post" action="/Account/StudentLog" onsubmit="return validateForm()">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" />
+                <span id="usernameError" class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password" name="password" placeholder="Enter your password" />
+                    <span class="toggle-password" onclick="togglePassword()">
+                        <img id="eyeIcon" src="https://cdn-icons-png.flaticon.com/512/159/159604.png" alt="Show" />
+                    </span>
+                </div>
+                <span id="passwordError" class="error-message"></span>
+            </div>
+
+            <div class="link-container">
+                <p><a href="/Account/ForgotPassword" class="forgot-password">Forgot your password?</a></p>
+            </div>
+
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        width: 100vw;
+        background: #F0F2F5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .login-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        width: 100vw;
+        height: calc(100vh - 50px);
+        background: #FFFFFF;
+    }
+
+    .login-header {
+        padding: 40px;
+        background: #EAECEF;
+        color: #333;
+        width: 100%;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 42px;
+        font-weight: bold;
+        color: #212529;
+    }
+
+    .login-content {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+        position: relative;
+    }
+
+        .form-group label {
+            font-size: 18px;
+            font-weight: bold;
+            display: block;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 90%;
+            padding: 14px;
+            font-size: 18px;
+            border: 2px solid #333;
+            border-radius: 12px;
+            outline: none;
+        }
+
+    .password-wrapper {
+        width: 103%;
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .toggle-password {
+        position: absolute;
+        right: 12px;
+        cursor: pointer;
+    }
+
+        .toggle-password img {
+            width: 24px;
+            height: 24px;
+        }
+
+    .error {
+        color: red;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .link-container {
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .forgot-password {
+        color: #333;
+        font-size: 16px;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+    button {
+        width: 100%;
+        padding: 16px;
+        font-size: 20px;
+        font-weight: bold;
+        background: #2C3E50;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        box-shadow: 0 8px 20px rgba(44, 62, 80, 0.5);
+        transition: all 0.3s ease;
+    }
+
+        button:hover {
+            background: #3E5668;
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(44, 62, 80, 0.7);
+        }
+</style>
+
+<script>
+    function validateForm() {
+        let username = document.getElementById("username").value;
+        let password = document.getElementById("password").value;
+        let isValid = true;
+
+        document.getElementById("usernameError").textContent = "";
+        document.getElementById("passwordError").textContent = "";
+
+        if (username.trim() === "") {
+            document.getElementById("usernameError").textContent = "Please enter your username.";
+            isValid = false;
+        }
+
+        if (password.trim() === "") {
+            document.getElementById("passwordError").textContent = "Please enter your password.";
+            isValid = false;
+        } else if (password.length < 6) {
+            document.getElementById("passwordError").textContent = "Password must be at least 6 characters.";
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function togglePassword() {
+        let passwordField = document.getElementById("password");
+        let eyeIcon = document.getElementById("eyeIcon");
+
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            eyeIcon.src = "https://cdn-icons-png.flaticon.com/512/159/159605.png";
+        } else {
+            passwordField.type = "password";
+            eyeIcon.src = "https://cdn-icons-png.flaticon.com/512/159/159604.png";
+        }
+    }
+</script>

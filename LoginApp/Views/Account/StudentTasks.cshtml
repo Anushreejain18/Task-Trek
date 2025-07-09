@@ -1,0 +1,344 @@
+﻿
+@{
+    ViewBag.Title = "Student Tasks";
+}
+
+<div class="dashboard-wrapper">
+    <div class="content-card">
+        <h2 class="card-header">📚 Your Assigned Tasks</h2>
+
+        @if (!string.IsNullOrEmpty(TempData["SuccessMessage"] as string))
+        {
+        <div class="success-message">@TempData["SuccessMessage"]</div>
+        }
+
+        @if (!string.IsNullOrEmpty(TempData["ErrorMessage"] as string))
+        {
+        <div class="error-message">@TempData["ErrorMessage"]</div>
+        }
+
+        @if (ViewBag.StudentTasks != null && ViewBag.StudentTasks.Count > 0)
+        {
+        <div class="form-group">
+            <label for="taskSelector">Select a Task</label>
+            <select id="taskSelector" class="status-dropdown" onchange="showSelectedTask()">
+                <option value="">-- Select a Task --</option>
+                @foreach (var task in ViewBag.StudentTasks)
+                    {
+                <option value="@task.TaskRecordId">@task.Title</option>
+                    }
+            </select>
+        </div>
+
+        <form method="post" action="@Url.Action("StudentTasks", "Account")" enctype="multipart/form-data" onsubmit="return showConfirmation()">
+            @foreach (var task in ViewBag.StudentTasks)
+                {
+            <div class="task-item" id="Task_@task.TaskRecordId" style="display: none;">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><strong>Task Title:</strong></label>
+                        <p>@task.Title</p>
+                    </div>
+                    <div class="form-group">
+                        <label><strong>Start Date:</strong></label>
+                        <p>@task.StartDate.ToString("dd MMM yyyy")</p>
+                    </div>
+                    <div class="form-group">
+                        <label><strong>End Date:</strong></label>
+                        <p>@task.EndDate.ToString("dd MMM yyyy")</p>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group" style="width: 100%;">
+                        <label><strong>Description:</strong></label>
+                        <p>@task.Description</p>
+                    </div>
+                </div>
+
+                <input type="hidden" name="taskIds" value="@task.TaskRecordId" />
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Status:</label>
+                        <div class="status-options">
+                            <button type="button" class="status-btn pending @(task.Status == "Pending" ? "selected" : "")" onclick="selectStatus('@task.TaskRecordId', 'Pending')">Pending</button>
+                            <button type="button" class="status-btn processing @(task.Status == "Processing" ? "selected" : "")" onclick="selectStatus('@task.TaskRecordId', 'Processing')">Processing</button>
+                            <button type="button" class="status-btn completed @(task.Status == "Completed" ? "selected" : "")" onclick="selectStatus('@task.TaskRecordId', 'Completed')">Completed</button>
+                        </div>
+                        <input type="hidden" name="statuses" id="Status_@task.TaskRecordId" value="@task.Status" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group" style="width: 100%;">
+                        <label for="Reply_@task.TaskRecordId">Reply:</label>
+                        <textarea name="replies" id="Reply_@task.TaskRecordId" placeholder="Add your reply..." required>@task.Reply</textarea>
+                    </div>
+                </div>
+
+                <div class="form-row" id="FileUpload_@task.TaskRecordId" style="display: @(task.Status == "Completed" ? "block" : "none");">
+                    <div class="form-group">
+                        <label for="File_@task.TaskRecordId">Upload File:</label>
+                        <input type="file" name="files" id="File_@task.TaskRecordId" accept=".pdf,.jpg,.png,.docx">
+                    </div>
+                </div>
+
+                <div class="form-row button-group">
+                    <button type="submit" class="btn-submit">Update Task</button>
+                </div>
+            </div>
+                }
+        </form>
+        }
+        else
+        {
+        <p class="no-tasks">No tasks assigned yet.</p>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function selectStatus(taskId, status) {
+            document.getElementById('Status_' + taskId).value = status;
+
+            const buttons = document.querySelectorAll('#Task_' + taskId + ' .status-btn');
+            buttons.forEach(btn => btn.classList.remove('selected'));
+
+            const selected = document.querySelector(`#Task_${taskId} .${status.toLowerCase()}`);
+            if (selected) {
+                selected.classList.add('selected');
+            }
+
+            const fileUpload = document.getElementById('FileUpload_' + taskId);
+            fileUpload.style.display = (status === 'Completed') ? 'block' : 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const selector = document.getElementById('taskSelector');
+            const tasks = document.querySelectorAll('.task-card');
+
+            selector.addEventListener('change', function () {
+                tasks.forEach(t => t.style.display = 'none');
+                const selected = document.getElementById('Task_' + this.value);
+                if (selected) selected.style.display = 'block';
+            });
+        });
+    </script>
+}
+
+<!-- Styles -->
+<style>
+    /* ===== General Layout & Typography ===== */
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #ecf0f1;
+        height: 100vh;
+        width: 100vw;
+        overflow-x: hidden;
+    }
+
+    /* ===== Wrapper & Content Card ===== */
+    .dashboard-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 40px;
+        background: #ecf0f1;
+    }
+
+    .content-card {
+        width: 100vw;
+        height: 100vh;
+        background-color: #ecf0f1;
+        padding: 30px 40px;
+    }
+
+    .card-header {
+        font-size: 28px;
+        color: #2C3E50;
+        margin-top: -30px;
+        margin-bottom: 80px;
+        border-bottom: 2px solid #2C3E50;
+        padding-bottom: 10px;
+    }
+
+    /* ===== Forms and Layouts ===== */
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+
+    .form-group {
+        margin-top: -25px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        width: 30vw;
+        margin-bottom: 10px;
+    }
+
+        .form-group label {
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #2C3E50;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 10px 12px;
+            font-size: 15px;
+            border: 2px solid #2C3E50;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+            .form-group input[type="file"] {
+                padding: 10px;
+                font-size: 16px;
+            }
+
+    /* ===== Textarea Styling ===== */
+    textarea {
+        margin-top: -2px;
+        margin-bottom: 25px;
+        color: black;
+        width: 100%;
+        max-width: 400px;
+        height: 32px;
+        font-size: 16px;
+        padding: 12px;
+        resize: vertical;
+        border: 2px solid #2C3E50;
+        border-radius: 6px;
+        background-color: #f9f9f9;
+    }
+
+    /* ===== Status Buttons ===== */
+    .status-options {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        margin-left: 70px;
+    }
+
+    .status-btn {
+        padding: 10px 15px;
+        font-weight: bold;
+        border-radius: 8px;
+        text-align: center;
+        width: 120px;
+        cursor: pointer;
+        border: none;
+    }
+
+    .pending {
+        background-color: yellow;
+        color: #000;
+    }
+
+    .processing {
+        background-color: dodgerblue;
+        color: #000;
+    }
+
+    .completed {
+        background-color: forestgreen;
+        color: #000;
+    }
+
+    .selected {
+        border: 3px solid black;
+    }
+
+    .status-group {
+        margin-top: 50px;
+    }
+
+    /* ===== Task Item Box ===== */
+    .task-item {
+        width: 50%;
+        background-color: white;
+        border: 2px solid #2C3E50;
+        padding: 25px;
+    }
+
+        .task-item + .task-item {
+            margin-top: 30px;
+        }
+
+    /* ===== Button Styling ===== */
+    .btn-submit,
+    .update-task {
+        background-color: #2C3E50;
+        color: #fff;
+        padding: 12px 20px;
+        font-size: 17px;
+        font-weight: bold;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        width: fit-content;
+        transition: background 0.3s ease;
+    }
+
+        .btn-submit:hover,
+        .update-task:hover {
+            background-color: #1a252f;
+        }
+
+    .update-task {
+        width: 300px;
+        padding: 10px 20px;
+        font-size: 22px;
+        margin-top: -30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(200, 200, 200, 0.5);
+    }
+
+    /* ===== Success / Error Messages ===== */
+    .success-message,
+    .success {
+        color: green;
+        font-weight: bold;
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    .success {
+        font-size: 20px;
+    }
+
+    .error-message,
+    .error {
+        color: red;
+        font-size: 12px;
+        margin-top: 5px;
+        text-align: center;
+    }
+
+    .error {
+        font-size: 20px;
+    }
+
+    /* ===== Empty State ===== */
+    .no-tasks {
+        text-align: center;
+        color: #2C3E50;
+        font-weight: bold;
+        font-size: 20px;
+    }
+</style>
+

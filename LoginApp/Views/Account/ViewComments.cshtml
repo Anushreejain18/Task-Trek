@@ -1,0 +1,133 @@
+﻿@model IEnumerable<LoginApp.Models.Resource>
+@{
+    ViewBag.Title = "Student Comments";
+}
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #ecf0f1;
+    }
+
+    .dashboard-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 40px;
+        background: #ecf0f1;
+    }
+
+    .content-card {
+        width: 100vw;
+        height: 100vh;
+        background-color: #ecf0f1;
+        padding: 30px 40px;
+    }
+
+    .card-header {
+        font-size: 28px;
+        color: #2C3E50;
+        margin-top: -30px;
+        margin-bottom: 40px;
+        border-bottom: 2px solid #2C3E50;
+        padding-bottom: 10px;
+    }
+
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+
+    .form-group {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2C3E50;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px 12px;
+            font-size: 15px;
+            border: 2px solid #2C3E50;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+    .btn-submit {
+        background-color: #2C3E50;
+        color: #fff;
+        padding: 12px 20px;
+        font-size: 17px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        width: fit-content;
+        transition: background 0.3s ease;
+    }
+
+        .btn-submit:hover {
+            background-color: #1a252f;
+        }
+
+    .card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        .card p {
+            color: #555;
+        }
+
+        .card h5 {
+            font-size: 18px;
+            color: #2C3E50;
+        }
+
+    .error-message {
+        color: red;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    .success-message {
+        color: green;
+        font-weight: bold;
+        font-size: 14px;
+        margin-top: -20px;
+        margin-bottom: 5px;
+        text-align: center;
+    }
+</style>
+
+<div class="dashboard-wrapper">
+    <div class="content-card">
+        <h2 class="card-header">💬 Comments by Students</h2>
+
+        @foreach (var item in Model)
+        {
+            <div class="card p-3 mb-3 border rounded shadow-sm">
+                <h5>@item.Title (@item.Class)</h5>
+                <p>@item.StudentComment</p>
+                <p><em>Date: @item.UploadDate.ToShortDateString()</em></p>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,255 @@
+﻿@model List<LoginApp.Models.TaskRecord>
+
+@{
+        ViewBag.Title = "Task Records";
+}
+
+<div class="dashboard-wrapper">
+    <div class="content-card">
+        <h2 class="card-header">📑 Task Records</h2>
+
+        <!-- Class Filter -->
+        <div class="form-row">
+            <div class="form-group">
+                <label for="classFilter">Filter by Class:</label>
+                <select id="classFilter" onchange="filterTasks()">
+                    <option value="all">All Classes</option>
+                    @if (Model != null && Model.Any())
+                        {
+                            foreach (var className in Model.Select(t => t.Class).Distinct())
+                            {
+                    <option value="@className">@className</option>
+                            }
+                        }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="searchInput">Search:</label>
+                <input type="text" id="searchInput" placeholder="Search by Name, Roll No, Task, Status..." onkeyup="filterTasks()" />
+            </div>
+        </div>
+
+        <!-- Task Table -->
+        <table id="taskTable">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Student Name</th>
+                    <th>Class</th>
+                    <th>Roll Number</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                    <th>Reply</th>
+                    <th>Submitted File</th>
+                </tr>
+            </thead>
+            <tbody id="taskTableBody">
+                @if (Model != null && Model.Any())
+                    {
+                        foreach (var task in Model)
+                        {
+                <tr>
+                    <td>@(string.IsNullOrEmpty(task.Title) ? "No Title" : task.Title)</td>
+                    <td>@(string.IsNullOrEmpty(task.Description) ? "No Description" : task.Description)</td>
+                    <td>@(string.IsNullOrEmpty(task.StudentName) ? "Unknown" : task.StudentName)</td>
+                    <td>@(task.Class ?? "N/A")</td>
+                    <td>@(task.RollNumber ?? "N/A")</td>
+                    <td>@(task.StartDate.ToString("dd MMM yyyy") ?? "N/A")</td>
+                    <td>@(task.EndDate.ToString("dd MMM yyyy") ?? "N/A")</td>
+                    <td>@(!string.IsNullOrEmpty(task.Status) ? task.Status : "Not Updated")</td>
+                    <td>@(!string.IsNullOrEmpty(task.Reply) ? task.Reply : "No Reply")</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(task.FilePath) && task.Status == "Completed")
+                                    {
+                        <a href="@Url.Content(task.FilePath)" target="_blank">Download</a>
+                                    }
+                                    else
+                                    {
+                        <span>No File</span>
+                                    }
+                    </td>
+                </tr>
+                        }
+                    }
+                    else
+                    {
+                <tr>
+                    <td colspan="10" class="empty-message">No tasks found</td>
+                </tr>
+                    }
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            @if (ViewBag.CurrentPage > 1)
+                {
+            <a href="@Url.Action("TaskRecord", "Account", new { page = ViewBag.CurrentPage - 1, searchTerm = ViewBag.SearchTerm })">&laquo; Prev</a>
+                }
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+            <a href="@Url.Action("TaskRecord", "Account", new { page = i, searchTerm = ViewBag.SearchTerm })"
+               class="@(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+                }
+
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                {
+            <a href="@Url.Action("TaskRecord", "Account", new { page = ViewBag.CurrentPage + 1, searchTerm = ViewBag.SearchTerm })">Next &raquo;</a>
+                }
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard-wrapper {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+        background-color: #ecf0f1;
+        min-height: 100vh;
+    }
+
+    .content-card {
+        width: 100vw;
+        height: 100vh;
+        background-color: #ecf0f1;
+        padding: 30px 40px;
+    }
+
+    .card-header {
+        font-size: 28px;
+        color: #2C3E50;
+        margin-top: -30px;
+        margin-bottom: 40px;
+        border-bottom: 2px solid #2C3E50;
+        padding-bottom: 10px;
+    }
+
+    .form-row {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        flex: 1;
+        margin: 10px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: bold;
+        color: #2C3E50;
+    }
+
+    select, input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    table {
+        width: 100%;
+        background-color: white;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 7px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #2C3E50;
+        color: white;
+    }
+
+    .empty-message {
+        text-align: center;
+        font-weight: bold;
+        color: red;
+    }
+
+    .pagination {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+        .pagination a {
+            padding: 10px 15px;
+            margin: 2px;
+            text-decoration: none;
+            background-color: #2C3E50;
+            color: white;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+            .pagination a.active,
+            .pagination a:hover {
+                background-color: #3E5668;
+                font-weight: bold;
+            }
+</style>
+
+<!-- JavaScript for Live Search -->
+<script>
+    function filterTasks() {
+        let input = document.getElementById("searchInput").value.toLowerCase();
+        let rows = document.querySelectorAll("#taskTableBody tr");
+
+        rows.forEach(row => {
+            let studentName = row.cells[2].innerText.toLowerCase();
+            let rollNumber = row.cells[4].innerText.toLowerCase();
+            let taskTitle = row.cells[0].innerText.toLowerCase();
+            let status = row.cells[7].innerText.toLowerCase();
+
+            if (studentName.includes(input) || rollNumber.includes(input) || taskTitle.includes(input) || status.includes(input)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
+
+    function filterTasks() {
+        let searchInput = document.getElementById("searchInput").value.toLowerCase();
+        let classFilter = document.getElementById("classFilter").value.toLowerCase();
+        let rows = document.querySelectorAll("#taskTableBody tr");
+
+        rows.forEach(row => {
+            let studentName = row.cells[2].innerText.toLowerCase();
+            let rollNumber = row.cells[4].innerText.toLowerCase();
+            let taskTitle = row.cells[0].innerText.toLowerCase();
+            let status = row.cells[7].innerText.toLowerCase();
+            let studentClass = row.cells[3].innerText.toLowerCase(); // Class Column
+
+            let matchesSearch = studentName.includes(searchInput) || rollNumber.includes(searchInput) || taskTitle.includes(searchInput) || status.includes(searchInput);
+            let matchesClass = classFilter === "all" || studentClass === classFilter;
+
+            if (matchesSearch && matchesClass) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
